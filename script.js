@@ -6,10 +6,10 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
+const dataUrl = "https://github.com/jayme218/MET-visualization/releases/download/v1.0-data/MetObjects_small.csv";
 
 
-
-d3.csv("/MET-visualization/MetObjects_small.csv").then(function(data) {
+d3.csv("dataUrl.csv").then(function(data) {
     
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
     const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
