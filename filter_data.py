@@ -9,6 +9,9 @@ exclude_departments = ["The Cloisters", "Robert Lehman Collection", "The Librari
 # 제외 조건 적용
 filtered_df = df[~df["Department"].isin(exclude_departments)]
 
+# artist name 컬럼 삭제
+filtered_df = filtered_df.drop(columns=["Artist Display Name"])
+
 # 새 CSV 파일로 저장
 filtered_df.to_csv("MetObjects_filtered.csv", index=False)
 
