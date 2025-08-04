@@ -4,7 +4,7 @@ import pandas as pd
 df = pd.read_csv("MetObjects_small.csv")
 
 # 제외할 부서 목록
-exclude_departments = ["The Cloisters", "Robert Lehman Collection", "The Libraries"]
+exclude_departments = ["The Cloisters", "Robert Lehman Collection", "The Libraries", "Musical Instruments"]
 
 # 제외 조건 적용
 filtered_df = df[~df["Department"].isin(exclude_departments)]

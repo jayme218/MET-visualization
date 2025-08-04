@@ -7,7 +7,7 @@ const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
 
-d3.csv("MetObjects_small.csv").then(function(data) {
+d3.csv("MetObjects_filtered.csv").then(function(data) {
     
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
     const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
