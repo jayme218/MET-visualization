@@ -156,7 +156,7 @@ function drawScene2(fullData, departmentName) {
         "Ancient Near Eastern Art": [{ year: -900, title: "The Sasanian Empire", label: "This period highlights the luxury arts of a major rival to Rome, exemplified by exquisite silver-gilt plates depicting royal hunts and courtly life." }],
         "Arts of Africa, Oceania, and the Americas": [{ year: 1800, title: "Ritual and Power", label: "The collection features powerful 19th-century ritual objects, such as the towering Asmat ancestor poles (bisj poles) from New Guinea and refined works from African kingdoms." }],
         "Medieval Art": [{ year: 300, title: "The Rise of Christian Art", label: "This collection reflects the transition from the Roman to the Byzantine Empire, with luxury ivory and silver objects that show early Christian iconography." }, { year: 1400, title: "Late Gothic & Early Renaissance", label: "Highlighted by treasures like the 'Belles Heures' of Jean de France, duc de Berry, a masterpiece of manuscript illumination from the Late Gothic period." }],
-        "Musical Instrument": [{year: 1800, title: "Romanticism", label: "During the Romantic era in music, expanding opportunities for musicians and composers led to two main settings for musical expression: the grand theaters and the intimate parlors."}]
+        "Musical Instruments": [{year: 1800, title: "Romanticism", label: "During the Romantic era in music, expanding opportunities for musicians and composers led to two main settings for musical expression: the grand theaters and the intimate parlors."}]
         
     };
 
