@@ -6,23 +6,19 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
-
 d3.csv("MetObjects_filtered.csv").then(function(data) {
     
-    const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
-    const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
-    console.log("Filtered data sample", filteredData.slice(0,10)); 
-
-    filteredData.forEach(d => {
+    data.forEach(d => {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
-    
-    allData = filteredData; // Assign the filtered data to the global variable
-    drawScene1(allData); // Start with Scene 1
+
+    allData = data; 
+    drawScene1(allData); 
 }).catch(function(error) {
     console.error("Error loading the data:", error);
-    vizDiv.text("Failed to load data. Please check if 'MetObjects_small.csv' is in the correct folder.");
+    vizDiv.text("Failed to load data. Please check if 'MetObjects_filtered.csv' is in the correct folder.");
 });
+
 
 
 /**
