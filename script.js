@@ -16,7 +16,7 @@ d3.csv("MetObjects_small.csv").then(function(data) {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
     
-    allData = filteredData; e
+    allData = filteredData; 
     drawScene1(allData); // Start with Scene 1
 }).catch(function(error) {
     console.error("Error loading the data:", error);
