@@ -6,7 +6,7 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
-const dataUrl = "https://github.com/jayme218/MET-visualization/releases/download/v1.0-data/MetObjects_small.csv";
+const dataUrl = "https://github.com/jayme218/MET-visualization/releases/tag/data";
 
 
 d3.csv(dataUrl).then(function(data) {
