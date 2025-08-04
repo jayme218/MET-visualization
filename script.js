@@ -20,7 +20,7 @@ d3.csv("MetObjects_filtered.csv").then(function(data) {
     drawScene1(allData); // Start with Scene 1
 }).catch(function(error) {
     console.error("Error loading the data:", error);
-    vizDiv.text("Failed to load data. Please check if 'MetObjects_small.csv' is in the correct folder.");
+    vizDiv.text("Failed to load data. Please check if MetObjects_filtered.csv' is in the correct folder.");
 });
 
 
