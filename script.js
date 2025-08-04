@@ -1,4 +1,3 @@
-
 let allData;
 
 const headerDiv = d3.select(".header");
@@ -6,20 +5,18 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
-d3.csv("MetObjects_filtered.csv").then(function(data) {
-    
-    data.forEach(d => {
-        d["Object Begin Date"] = +d["Object Begin Date"];
+d3.csv("https://dl.dropboxusercontent.com/scl/fi/uyyl7bob177b7e7ynepdk/MetObjects_small.csv?rlkey=6q7gnq62n0p3u822bfhx0adul&st=lzhmcz7a")
+    .then(function (data) {
+        const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
+        const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
+        filteredData.forEach(d => d["Object Begin Date"] = +d["Object Begin Date"]);
+        allData = filteredData;
+        drawScene1(allData);
+    })
+    .catch(function (error) {
+        console.error("Error loading the data:", error);
+        vizDiv.text("Failed to load data. Please check the link or file permissions.");
     });
-
-    allData = data; 
-    drawScene1(allData); 
-}).catch(function(error) {
-    console.error("Error loading the data:", error);
-    vizDiv.text("Failed to load data. Please check if 'MetObjects_filtered.csv' is in the correct folder.");
-});
-
-
 
 /**
  * SCENE 1: Draws the Treemap of all departments
@@ -58,40 +55,31 @@ function drawScene1(data) {
         .attr("fill", d => color(d.data.name));
 
     nodes.append("text")
-    .selectAll("tspan")
-    .data(d => {
-        // d.data.name이 없거나 문자열이 아니면 빈 배열 반환
-        if (typeof d.data.name === "string") {
-            return d.data.name.split(/(?=[A-Z][^A-Z])/g);
-        } else {
-            return [d.data.name || ""];
-        }
-    })
-    .join("tspan")
-    .attr("x", 5)
-    .attr("y", (d, i) => 15 + i * 12)
-    .text(d => d)
-    .attr("display", function(d) {
-        const nodeData = d3.select(this.parentNode).datum();
-        return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
-    });
+        .selectAll("tspan")
+        .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
+        .join("tspan")
+        .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
+        .attr("display", function (d) {
+            const nodeData = d3.select(this.parentNode).datum();
+            return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
+        });
 
     nodes.on("click", (event, d) => {
         tooltip.style("opacity", 0); // Hide tooltip on click
         const departmentName = d.data.name;
         drawScene2(allData, departmentName);
     })
-    .on("mouseover", function(event, d) {
-        tooltip.style("opacity", 1);
-    })
-    .on("mousemove", function(event, d) {
-        tooltip.html(`<strong>${d.data.name}</strong><br>${d.data.value.toLocaleString()} artworks`)
-            .style("left", (event.pageX + 15) + "px")
-            .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseleave", function(event, d) {
-        tooltip.style("opacity", 0);
-    });
+        .on("mouseover", function (event, d) {
+            tooltip.style("opacity", 1);
+        })
+        .on("mousemove", function (event, d) {
+            tooltip.html(`<strong>${d.data.name}</strong><br>${d.data.value.toLocaleString()} artworks`)
+                .style("left", (event.pageX + 15) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseleave", function (event, d) {
+            tooltip.style("opacity", 0);
+        });
 }
 
 
@@ -109,7 +97,7 @@ function drawScene2(fullData, departmentName) {
         .sort((a, b) => a.year - b.year);
 
     const maxCount = d3.max(processedData, d => d.count);
-    const threshold = Math.max(maxCount * 0.005, 5); 
+    const threshold = Math.max(maxCount * 0.005, 5);
     const finalProcessedData = processedData.filter(d => d.count > threshold);
 
     const margin = { top: 40, right: 30, bottom: 60, left: 70 };
@@ -144,14 +132,14 @@ function drawScene2(fullData, departmentName) {
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.count))
-        .on("mouseover", function(event, d) { tooltip.style("opacity", 1); })
-        .on("mousemove", function(event, d) {
+        .on("mouseover", function (event, d) { tooltip.style("opacity", 1); })
+        .on("mousemove", function (event, d) {
             tooltip.html(`<strong>Period:</strong> ${d.year}s<br><strong>Artworks:</strong> ${d.count}`)
                 .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 28) + "px");
         })
-        .on("mouseleave", function(event, d) { tooltip.style("opacity", 0); })
+        .on("mouseleave", function (event, d) { tooltip.style("opacity", 0); })
         .on("click", (event, d) => { drawScene3(departmentData, departmentName, d.year); });
-        
+
     const departmentInsights = {
         "European Paintings": [{ year: 1800, title: "Impressionism & Post-Impressionism", label: "A defining feature of The Met, this collection holds iconic works by Monet, Degas, and Van Gogh, capturing a revolutionary shift in art." }],
         "Drawings and Prints": [{ year: 1800, title: "The Age of Proliferation", label: "This peak reflects the explosion of print media like lithography, with rich holdings from artists like Goya, Daumier, and Whistler." }],
@@ -185,10 +173,10 @@ function drawScene2(fullData, departmentName) {
         if (bestInsight) { annotationTarget = bestInsight; }
     }
     if (!annotationTarget) {
-      const maxData = finalProcessedData.reduce((prev, current) => (prev.count > current.count) ? prev : current, {count: 0});
-      if (maxData.count > 0) {
-        annotationTarget = { ...maxData, title: "Highlight", label: `The ${maxData.year}s are the most represented period in this department.` };
-      }
+        const maxData = finalProcessedData.reduce((prev, current) => (prev.count > current.count) ? prev : current, { count: 0 });
+        if (maxData.count > 0) {
+            annotationTarget = { ...maxData, title: "Highlight", label: `The ${maxData.year}s are the most represented period in this department.` };
+        }
     }
 
     if (annotationTarget) {
@@ -222,9 +210,9 @@ function drawScene3(departmentData, departmentName, year) {
         .slice(0, 10)
         .map(d => d.name);
 
-    const yearlyCounts = d3.rollup(periodData, 
-        v => v.length, 
-        d => d["Object Begin Date"], 
+    const yearlyCounts = d3.rollup(periodData,
+        v => v.length,
+        d => d["Object Begin Date"],
         d => topMediums.includes(d.Medium) ? d.Medium : "Other"
     );
 
@@ -236,7 +224,7 @@ function drawScene3(departmentData, departmentName, year) {
     }).sort((a, b) => a.year - b.year);
 
     const keys = [...topMediums, "Other"];
-    
+
     const margin = { top: 20, right: 30, bottom: 60, left: 80 };
     const width = 1000 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
@@ -285,15 +273,15 @@ function drawScene3(departmentData, departmentName, year) {
         .attr("class", "stream-layer")
         .style("fill", d => color(d.key))
         .attr("d", area)
-        .on("mouseover", function(event, d) {
+        .on("mouseover", function (event, d) {
             d3.selectAll(".stream-layer").style("opacity", 0.3);
             d3.select(this).style("opacity", 1);
             tooltip.style("opacity", 1).html(`<strong>Material:</strong> ${d.key}`);
         })
-        .on("mousemove", function(event, d) {
+        .on("mousemove", function (event, d) {
             tooltip.style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 28) + "px");
         })
-        .on("mouseleave", function(event, d) {
+        .on("mouseleave", function (event, d) {
             d3.selectAll(".stream-layer").style("opacity", 1);
             tooltip.style("opacity", 0);
         });
