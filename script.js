@@ -61,8 +61,8 @@ function drawScene1(data) {
         .attr("fill", d => color(d.data.name));
 
     nodes.append("text")
-        .selectAll("tspan")
-.data(d => (d.data.name ? d.data.name.split(/(?=[A-Z][^A-Z])/g) : []))
+    .selectAll("tspan")
+    .data(d => (d.data.name ? d.data.name.split(/(?=[A-Z][^A-Z])/g) : []))
         .join("tspan")
         .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
         .attr("display", function(d) {
