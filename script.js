@@ -9,12 +9,12 @@ const tooltip = d3.select("#tooltip");
 
 
 
-d3.csv("/MET-visualization/MetObjects_small.csv").then(function(data) {
-    // Filter out specific departments
+dd3.csv("/MET-visualization/MetObjects_small.csv").then(function(data) {
+    
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
-    const filteredData = data.filter(d => !departmentsToExclude.includes(d.Department));
+    const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
+    console.log("Filtered data sample", filteredData.slice(0,10)); 
 
-    // Convert relevant columns to numbers
     filteredData.forEach(d => {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
