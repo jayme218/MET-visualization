@@ -9,7 +9,7 @@ const tooltip = d3.select("#tooltip");
 
 
 
-dd3.csv("/MET-visualization/MetObjects_small.csv").then(function(data) {
+d3.csv("/MET-visualization/MetObjects_small.csv").then(function(data) {
     
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
     const filteredData = data.filter(d => d.Department && !departmentsToExclude.includes(d.Department));
