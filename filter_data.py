@@ -12,7 +12,8 @@ filtered_df = df[~df["Department"].isin(exclude_departments)]
 # artist name 컬럼 삭제
 filtered_df = filtered_df.drop(columns=["Artist Display Name"])
 
-# 새 CSV 파일로 저장
+filtered_df = filtered_df[filtered_df["Department"].notnull()]
+
 filtered_df.to_csv("MetObjects_filtered.csv", index=False)
 
-print("필터링된 CSV 파일이 저장되었습니다.")
+print("필터링된 CSV 파일이 저장되었습니다.") 
