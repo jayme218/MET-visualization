@@ -6,7 +6,7 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
-d3.csv("MetObjects_filtered.csv").then(function(data) {
+d3.csv("MetObjects_filtered_no_libraries.csv").then(function(data) {
     
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection"];
     const filteredData = data.filter(d => !departmentsToExclude.includes(d.Department));
