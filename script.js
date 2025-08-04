@@ -6,7 +6,7 @@ const vizDiv = d3.select("#visualization");
 const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
-d3.csv("MetObjects_filtered_no_libraries.csv").then(function(data) {
+d3.csv("MetObjects_small.csv").then(function(data) {
     
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection"];
     const filteredData = data.filter(d => !departmentsToExclude.includes(d.Department));
@@ -16,11 +16,11 @@ d3.csv("MetObjects_filtered_no_libraries.csv").then(function(data) {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
     
-    allData = filteredData; 
+    allData = filteredData; e
     drawScene1(allData); // Start with Scene 1
 }).catch(function(error) {
     console.error("Error loading the data:", error);
-    vizDiv.text("Failed to load data. Please check if MetObjects_filtered.csv' is in the correct folder.");
+    vizDiv.text("Failed to load data. Please check if 'MetObjects_small.csv' is in the correct folder.");
 });
 
 
@@ -61,8 +61,8 @@ function drawScene1(data) {
         .attr("fill", d => color(d.data.name));
 
     nodes.append("text")
-    .selectAll("tspan")
-    .data(d => (d.data.name ? d.data.name.split(/(?=[A-Z][^A-Z])/g) : []))
+        .selectAll("tspan")
+        .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
         .join("tspan")
         .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
         .attr("display", function(d) {
