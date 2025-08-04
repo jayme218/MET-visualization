@@ -8,8 +8,12 @@ const tooltip = d3.select("#tooltip");
 
 d3.csv("MetObjects_small.csv").then(function(data) {
     const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
-    const filteredData = data.filter(d => !departmentsToExclude.includes(d.Department));
 
+    
+    const filteredData = data.filter(d => 
+        d.Department && !departmentsToExclude.includes(d.Department)
+    );
+    
     filteredData.forEach(d => {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
@@ -59,14 +63,14 @@ function drawScene1(data) {
         .attr("fill", d => color(d.data.name));
 
     nodes.append("text")
-        .selectAll("tspan")
-        .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
-        .join("tspan")
-        .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
-        .attr("display", function(d) {
-            const nodeData = d3.select(this.parentNode).datum();
-            return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
-        });
+    .selectAll("tspan")
+    .data(d => (d.data.name ? d.data.name.split(/(?=[A-Z][^A-Z])/g) : [""]))
+    .join("tspan")
+    .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
+    .attr("display", function(d) {
+        const nodeData = d3.select(this.parentNode).datum();
+        return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
+    });
 
     nodes.on("click", (event, d) => {
         tooltip.style("opacity", 0); // Hide tooltip on click
