@@ -7,16 +7,14 @@ const controlsDiv = d3.select("#controls");
 const tooltip = d3.select("#tooltip");
 
 d3.csv("MetObjects_small.csv").then(function(data) {
-    
-    const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection"];
+    const departmentsToExclude = ["The Cloisters", "Robert Lehman Collection", "The Libraries"];
     const filteredData = data.filter(d => !departmentsToExclude.includes(d.Department));
 
-    // Convert relevant columns to numbers
     filteredData.forEach(d => {
         d["Object Begin Date"] = +d["Object Begin Date"];
     });
     
-    allData = filteredData; e
+    allData = filteredData; // Assign the filtered data to the global variable
     drawScene1(allData); // Start with Scene 1
 }).catch(function(error) {
     console.error("Error loading the data:", error);
@@ -71,7 +69,7 @@ function drawScene1(data) {
         });
 
     nodes.on("click", (event, d) => {
-        tooltip.style("opacity", 0); 
+        tooltip.style("opacity", 0); // Hide tooltip on click
         const departmentName = d.data.name;
         drawScene2(allData, departmentName);
     })
@@ -122,7 +120,7 @@ function drawScene2(fullData, departmentName) {
     const y = d3.scaleLinear().domain([0, d3.max(finalProcessedData, d => d.count)]).range([height, 0]);
     svg.append("g").attr("class", "y-axis").call(d3.axisLeft(y));
 
-    // Axis Labels
+    // Add Axis Labels
     svg.append("text").attr("class", "axis-label")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin.left + 20)
