@@ -58,14 +58,23 @@ function drawScene1(data) {
         .attr("fill", d => color(d.data.name));
 
     nodes.append("text")
-        .selectAll("tspan")
-        .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
-        .join("tspan")
-        .attr("x", 5).attr("y", (d, i) => 15 + i * 12).text(d => d)
-        .attr("display", function(d) {
-            const nodeData = d3.select(this.parentNode).datum();
-            return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
-        });
+    .selectAll("tspan")
+    .data(d => {
+        // d.data.name이 없거나 문자열이 아니면 빈 배열 반환
+        if (typeof d.data.name === "string") {
+            return d.data.name.split(/(?=[A-Z][^A-Z])/g);
+        } else {
+            return [d.data.name || ""];
+        }
+    })
+    .join("tspan")
+    .attr("x", 5)
+    .attr("y", (d, i) => 15 + i * 12)
+    .text(d => d)
+    .attr("display", function(d) {
+        const nodeData = d3.select(this.parentNode).datum();
+        return (nodeData.x1 - nodeData.x0) > 60 ? "inline" : "none";
+    });
 
     nodes.on("click", (event, d) => {
         tooltip.style("opacity", 0); // Hide tooltip on click
